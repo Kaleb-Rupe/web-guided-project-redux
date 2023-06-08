@@ -1,29 +1,31 @@
-import React, { useState } from 'react';
+import React from "react";
+
+import { connect } from "react-redux";
+import { updateTitle, updateNewTitle } from "../actions/titleActions";
 
 const TitleForm = (props) => {
-    const [newTitleText, setNewTitleText] = useState();
+  return (
+    <div>
+      <input
+        className="title-input"
+        type="text"
+        name="newTitleText"
+        value={props.newTitle}
+        onChange={(e) => props.updateNewTitle(e.target.value)}
+      />
+      <button onClick={() => props.updateTitle(props.newTitle)}>
+        Update title
+      </button>
+    </div>
+  );
+};
 
-    const handleChanges = e => {
-        setNewTitleText(e.target.value);
-    };
+const addStateToProps = (state) => {
+  return {
+    newTitle: state.title.newTitle,
+  };
+};
 
-    const handleSubmit = ()=> {
-        props.handleTitleUpdate(newTitleText);
-    }
-    
-    return(<div>
-          <input
-            className="title-input"
-            type="text"
-            name="newTitleText"
-            value={newTitleText}
-            onChange={handleChanges}
-          />
-          <button
-            onClick={handleSubmit}>
-            Update title
-          </button>
-        </div>);
-}
-
-export default TitleForm;
+export default connect(addStateToProps, { updateNewTitle, updateTitle })(
+  TitleForm
+);
